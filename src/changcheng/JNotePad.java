@@ -2,8 +2,7 @@ package changcheng;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 /**
  * Created by changcheng on 2017/4/16.
@@ -27,6 +26,8 @@ public class JNotePad extends JFrame {
 
     private JTextArea textArea;
     private JLabel stateBar;
+
+    private JPopupMenu popupMenu;
 
     public JNotePad() {
         initComponent();
@@ -83,7 +84,18 @@ public class JNotePad extends JFrame {
         stateBar.setHorizontalAlignment(SwingConstants.LEFT);
         stateBar.setBorder(BorderFactory.createEtchedBorder());
         containerPane.add(stateBar, BorderLayout.SOUTH);
+
+        popupMenu = editMenu.getPopupMenu();
     }
+
+    private void openFile() { }
+    private void saveFile() { }
+    private void saveFileAs() { }
+    private void closeFile() { }
+    private void cut() { }
+    private void copy() { }
+    private void paste() { }
+    private void jtextAreaActionPerformed() { }
 
     private void initEventListeners() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -99,6 +111,116 @@ public class JNotePad extends JFrame {
                 InputEvent.CTRL_MASK));
         menuPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
                 InputEvent.CTRL_MASK));
+
+        addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        closeFile();
+                    }
+                }
+        );
+
+        menuOpen.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        openFile();
+                    }
+                }
+        );
+
+        menuSave.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        saveFile();
+                    }
+                }
+        );
+
+        menuSaveAs.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        saveFileAs();
+                    }
+                }
+        );
+
+        menuClose.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        closeFile();
+                    }
+                }
+        );
+
+        menuCut.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        cut();
+                    }
+                }
+        );
+
+        menuCopy.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        copy();
+                    }
+                }
+        );
+
+        menuPaste.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        paste();
+                    }
+                }
+        );
+
+        menuAbout.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showOptionDialog(null, "\tJNotePad 1.0\n comes from changcheng",
+                                "About JNotePad",
+                                JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE,
+                                null, null, null);
+                    }
+                }
+        );
+
+        textArea.addKeyListener(
+                new KeyAdapter() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        jtextAreaActionPerformed();
+                    }
+                }
+        );
+
+        textArea.addMouseListener(
+                new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        if (e.getButton() == MouseEvent.BUTTON1)
+                            popupMenu.setVisible(false);
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        if (e.getButton() == MouseEvent.BUTTON3)
+                            popupMenu.show(editMenu, e.getX(), e.getY());
+                    }
+                }
+        );
     }
 
     public static void main(String[] args) {

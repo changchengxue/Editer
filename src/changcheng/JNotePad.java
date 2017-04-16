@@ -3,6 +3,9 @@ package changcheng;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Created by changcheng on 2017/4/16.
@@ -143,9 +146,55 @@ public class JNotePad extends JFrame {
         }
     }
 
-    private void saveFile() { }
-    private void saveFileAs() { }
-    private void closeFile() { }
+    private void saveFile() {
+        Path path = Paths.get(getTitle());
+        if (Files.notExists(path)) {
+            saveFileAs();
+        } else {
+            try {
+                textDAO.save(path.toString(), textArea.getText());
+                stateBar.setText("未修改");
+            } catch (Throwable e) {
+                JOptionPane.showMessageDialog(null,
+                        e.toString(),
+                        "写入文档失败",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+    }
+
+    private void saveFileAs() {
+        int option = fileChooser.showDialog(null, null);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            setTitle(fileChooser.getSelectedFile().toString());
+            textDAO.create(
+                    fileChooser.getSelectedFile().toString()
+            );
+            saveFile();
+        }
+    }
+    private void closeFile() {
+        if (stateBar.getText().equals("未修改")) {
+            dispose();
+        } else {
+            int option = JOptionPane.showConfirmDialog(
+                    null,
+                    "文档以修改，是否存储？",
+                    "存储文档?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null
+            );
+            switch (option) {
+                case JOptionPane.YES_OPTION:
+                    saveFile();
+                    break;
+                case JOptionPane.NO_OPTION:
+                    dispose();
+            }
+        }
+    }
     private void cut() { }
     private void copy() { }
     private void paste() { }

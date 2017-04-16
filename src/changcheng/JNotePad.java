@@ -12,6 +12,8 @@ public class JNotePad extends JFrame {
 
     private TextDAO textDAO;
 
+    private JFileChooser fileChooser;
+
     private JMenu fileMenu;
     private JMenuItem menuOpen;
     private JMenuItem menuSave;
@@ -93,6 +95,8 @@ public class JNotePad extends JFrame {
         containerPane.add(stateBar, BorderLayout.SOUTH);
 
         popupMenu = editMenu.getPopupMenu();
+
+        fileChooser = new JFileChooser();
     }
 
     private void openFile() {
@@ -119,7 +123,26 @@ public class JNotePad extends JFrame {
         }
     }
 
-    private void showFileDialog() { }
+    private void showFileDialog() {
+        int option = fileChooser.showDialog(null, null);
+        if (option == JFileChooser.APPROVE_OPTION) {
+            try {
+                setTitle(
+                        fileChooser.getSelectedFile().toString()
+                );
+                textArea.setText("");
+                stateBar.setText("未修改");
+                String text = textDAO.read(
+                        fileChooser.getSelectedFile().toString()
+                );
+                textArea.setText(text);
+            } catch (Throwable e) {
+                JOptionPane.showMessageDialog(null, e.toString(),
+                        "打开文档失败", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     private void saveFile() { }
     private void saveFileAs() { }
     private void closeFile() { }

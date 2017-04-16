@@ -330,7 +330,7 @@ public class JNotePad extends JFrame {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new JNotePad().setVisible(true);
+                new JNotePad(new FileTextDAO()).setVisible(true);
             }
         });
     }

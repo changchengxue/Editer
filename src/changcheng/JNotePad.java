@@ -1,6 +1,7 @@
 package changcheng;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -24,6 +25,8 @@ public class JNotePad extends JFrame {
     private JMenu aboutMenu;
     private JMenuItem menuAbout;
 
+    private JTextArea textArea;
+    private JLabel stateBar;
 
     public JNotePad() {
         initComponent();
@@ -65,6 +68,21 @@ public class JNotePad extends JFrame {
         menuBar.add(aboutMenu);
 
         setJMenuBar(menuBar);
+
+        textArea = new JTextArea();
+        textArea.setFont(new Font("明细体", Font.PLAIN, 16));
+        textArea.setLineWrap(true);
+        JScrollPane panel = new JScrollPane(textArea,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        Container containerPane = getContentPane();
+        containerPane.add(panel, BorderLayout.CENTER);
+
+        stateBar = new JLabel("未修改");
+        stateBar.setHorizontalAlignment(SwingConstants.LEFT);
+        stateBar.setBorder(BorderFactory.createEtchedBorder());
+        containerPane.add(stateBar, BorderLayout.SOUTH);
     }
 
     private void initEventListeners() {

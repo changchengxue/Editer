@@ -174,6 +174,7 @@ public class JNotePad extends JFrame {
             saveFile();
         }
     }
+
     private void closeFile() {
         if (stateBar.getText().equals("未修改")) {
             dispose();
@@ -195,10 +196,27 @@ public class JNotePad extends JFrame {
             }
         }
     }
-    private void cut() { }
-    private void copy() { }
-    private void paste() { }
-    private void jtextAreaActionPerformed() { }
+
+    private void cut() {
+        textArea.cut();
+        stateBar.setText("已修改");
+        popupMenu.setVisible(false);
+    }
+
+    private void copy() {
+        textArea.copy();
+        popupMenu.setVisible(false);
+    }
+
+    private void paste() {
+        textArea.paste();
+        stateBar.setText("已修改");
+        popupMenu.setVisible(false);
+    }
+
+    private void jtextAreaActionPerformed() {
+        stateBar.setText("已修改");
+    }
 
     private void initEventListeners() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

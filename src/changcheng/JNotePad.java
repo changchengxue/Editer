@@ -10,6 +10,8 @@ import java.awt.event.*;
 public class JNotePad extends JFrame {
     private JMenuBar menuBar;
 
+    private TextDAO textDAO;
+
     private JMenu fileMenu;
     private JMenuItem menuOpen;
     private JMenuItem menuSave;
@@ -29,7 +31,12 @@ public class JNotePad extends JFrame {
 
     private JPopupMenu popupMenu;
 
-    public JNotePad() {
+    public JNotePad(TextDAO textDAO) {
+        this();
+        this.textDAO = textDAO;
+    }
+
+    protected JNotePad() {
         initComponent();
         initEventListeners();
     }
@@ -88,7 +95,31 @@ public class JNotePad extends JFrame {
         popupMenu = editMenu.getPopupMenu();
     }
 
-    private void openFile() { }
+    private void openFile() {
+        if (stateBar.getText().equals("未修改")) {
+            showFileDialog();
+        } else {
+            int option = JOptionPane.showConfirmDialog(
+                    null,
+                    "文档已修改，是否存储？",
+                    "存储文档?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null
+            );
+
+            switch (option) {
+                case JOptionPane.YES_OPTION:
+                    saveFile();
+                    break;
+                case JOptionPane.NO_OPTION:
+                    showFileDialog();
+                    break;
+            }
+        }
+    }
+
+    private void showFileDialog() { }
     private void saveFile() { }
     private void saveFileAs() { }
     private void closeFile() { }
